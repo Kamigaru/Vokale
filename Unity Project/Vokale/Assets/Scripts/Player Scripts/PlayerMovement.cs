@@ -27,19 +27,19 @@ public class PlayerMovement : MonoBehaviour
 
         isGround = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
-        if(isGround && velocity.y < 0)
+        if (isGround && velocity.y < 0)
         {
             velocity.y = -1f;
         }
 
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
-        
+
         Vector3 move = transform.right * x + transform.forward * z;
 
         //Pressing Shift to Sprint
         if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
-        { 
+        {
             player.Move(move * sprintSpeed * Time.deltaTime);
         }
         else
@@ -48,7 +48,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //Jump
-        if(Input.GetButtonDown("Jump") && isGround)
+        if (Input.GetButtonDown("Jump") && isGround)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
@@ -58,6 +58,6 @@ public class PlayerMovement : MonoBehaviour
         velocity.y += gravity * Time.deltaTime;
 
         player.Move(velocity * Time.deltaTime);
-        
+
     }
 }
