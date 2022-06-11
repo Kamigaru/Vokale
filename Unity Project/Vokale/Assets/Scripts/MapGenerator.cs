@@ -7,8 +7,9 @@ public class MapGenerator : MonoBehaviour
     public enum DrawMode { NoiseMap, ColourMap, Mesh }
     public DrawMode drawmode;
 
-    public int mapWidth;
-    public int mapHeight;
+    public const int MapChunkSize = 241;
+    [Range(0,6)]
+    public int levelOfDetail;
     public float noiseScale;
 
     public float treeNoiseScale;
@@ -41,20 +42,15 @@ public class MapGenerator : MonoBehaviour
 
     public void GenerateTree()
     {
-        float[,] noiseMap = Noise.GenerateNoiseMap(mapWidth, mapHeight, seed, noiseScale, octaves, persistance, lacunarity, offset);
+        float[,] noiseMap = Noise.GenerateNoiseMap(MapChunkSize, MapChunkSize, seed, noiseScale, octaves, persistance, lacunarity, offset);
         int treeIndex = 0;
-        for(int y = 0; y < mapHeight; y++)
+        for(int y = 0; y < MapChunkSize; y++)
         {
-            for(int x = 0; x < mapWidth; x++)
+            for(int x = 0; x < MapChunkSize; x++)
             {
                 if(noiseMap[x, y] > 0.4f && noiseMap[x,y] < 0.6f)
                 {
-                    float d = Random.Range(0f, treeDensity);
-                    if (noiseMap[x, y] < d)
-                    {
-                        treeIndex++;
-                        Instantiate(TreePrefab, new Vector2(x, y), Quaternion.identity);
-                    }
+                    treeIndex++;
                 }
             }
         }
@@ -64,13 +60,13 @@ public class MapGenerator : MonoBehaviour
 
     public void generateMap()
     {
-        float[,] noiseMap = Noise.GenerateNoiseMap(mapWidth, mapHeight, seed, noiseScale, octaves, persistance, lacunarity, offset);
+        float[,] noiseMap = Noise.GenerateNoiseMap(MapChunkSize, MapChunkSize, seed, noiseScale, octaves, persistance, lacunarity, offset);
 
-        Color[] colourMap = new Color[mapWidth * mapHeight];
+        Color[] colourMap = new Color[MapChunkSize * MapChunkSize];
         int treeIndex = 0;
-        for(int y = 0; y < mapHeight; y++)
+        for(int y = 0; y < MapChunkSize; y++)
         {
-            for(int x = 0; x < mapWidth; x++)
+            for(int x = 0; x < MapChunkSize; x++)
             {
                 float currentHeight = noiseMap[x, y];
                 //float TreeMap = TreenoiseMap[x, y];
@@ -78,7 +74,7 @@ public class MapGenerator : MonoBehaviour
                 {
                     if(currentHeight <= regions[i].height)
                     {
-                        colourMap[y * mapWidth + x] = regions[i].colour;
+                        colourMap[y * MapChunkSize + x] = regions[i].colour;
                         break;
                     }
 
@@ -103,26 +99,18 @@ public class MapGenerator : MonoBehaviour
             display.DrawTexture(TextureGenerator.TextureFromHeightMap(noiseMap));
         } else if(drawmode == DrawMode.ColourMap)
         {
-            display.DrawTexture(TextureGenerator.TextureFromColourMap(colourMap, mapWidth, mapHeight));
+            display.DrawTexture(TextureGenerator.TextureFromColourMap(colourMap, MapChunkSize, MapChunkSize));
         }
         else if(drawmode == DrawMode.Mesh)
         {
-            display.DrawMesh(MeshGenerator.GenerateTerrtainMesh(noiseMap, meshHeightMultiplier, meshHeightCurve), TextureGenerator.TextureFromColourMap(colourMap, mapWidth, mapHeight));
+            display.DrawMesh(MeshGenerator.GenerateTerrtainMesh(noiseMap, meshHeightMultiplier, meshHeightCurve, levelOfDetail), TextureGenerator.TextureFromColourMap(colourMap, MapChunkSize, MapChunkSize));
         }
 
-        GenerateTree();
+        //GenerateTree();
     }
 
     void OnValidate()
     {
-        if(mapWidth < 1)
-        {
-            mapWidth = 1;
-        }
-        if(mapHeight < 1)
-        {
-            mapHeight = 1;
-        }
         if(lacunarity < 1)
         {
             lacunarity = 1;
