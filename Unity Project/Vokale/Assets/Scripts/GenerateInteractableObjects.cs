@@ -35,18 +35,22 @@ public class GenerateInteractableObjects : MonoBehaviour
         }
 
         Debug.Log((int)region.transform.position.z);
-        for (int y = (int)region.transform.position.z; y != y + 100; y++)
+        Debug.Log((int)region.transform.position.z + 100);
+
+        int target = (int)region.transform.position.z + 100;
+        for (int z = (int)region.transform.position.z; z < target ; z++)
         {
-            for (int x = (int)region.transform.position.x; x != x + 100; x++)
+            Debug.Log(z);
+            for (int x = 0; x < 100; x++)
             {
                 float sampleX = x / noiseScale;
-                float sampleY = y / noiseScale;
+                float sampleY = z / noiseScale;
 
                 float perlinValue = Mathf.PerlinNoise(sampleX, sampleY);
                 //noiseMap[x, y] = perlinValue;
                 if (perlinValue >= treeCutOfPoint)
                 {
-                    SpawnTree(x, y, treePrefab);
+                    SpawnTree(x, z, treePrefab);
                 }
             }
         }
