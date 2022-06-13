@@ -16,6 +16,8 @@ public class GenerateInteractableObjects : MonoBehaviour
     [Range(0f, 1f)]
     public float treeCutOfPoint;
 
+    public LayerMask TargetLayer;
+
     private void Start()
     {
         region = gameObject.GetComponent<Terrain>();
@@ -52,7 +54,6 @@ public class GenerateInteractableObjects : MonoBehaviour
                 //noiseMap[x, y] = perlinValue;
                 if (perlinValue >= treeCutOfPoint)
                 {
-                    Debug.Log("Run");
                     SpawnTree(x, z, treePrefab);
                 }
             }
@@ -61,7 +62,7 @@ public class GenerateInteractableObjects : MonoBehaviour
 
     public void SpawnTree(int posX, int posZ, GameObject treePrefab)
     {
-        if (Physics.Raycast(new Vector3(posX, 100, posZ), new Vector3(0, -1, 0), out RaycastHit hitInfo, 200f))
+        if (Physics.Raycast(new Vector3(posX, 100, posZ), new Vector3(0, -1, 0), out RaycastHit hitInfo, 200f, TargetLayer))
         {
             if (!HasObstacle(hitInfo))
             {
