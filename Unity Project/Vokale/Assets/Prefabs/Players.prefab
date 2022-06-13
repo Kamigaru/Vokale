@@ -66,16 +66,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 943f118c7986b4744838b43fbbfdbd6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  player: {fileID: 3535148081005285998}
   speed: 10
   sprintSpeed: 30
   gravity: -9.81
   jumpHeight: 10
-  groundCheck: {fileID: 0}
+  groundCheck: {fileID: 3535148081026015972}
   groundDistance: 0.4
   groundMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
 --- !u!1 &3535148081026015973
 GameObject:
   m_ObjectHideFlags: 0
@@ -204,7 +204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ced8c210c280cc4f891a2b2de36c3b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensitivity: 100
+  sensitivity: 350
   playerBody: {fileID: 3535148081005285985}
   mouseLock: 1
 --- !u!1 &3535148082593042511
